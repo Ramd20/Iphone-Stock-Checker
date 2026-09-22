@@ -1,5 +1,4 @@
 import requests
-import json
 import time
 import os
 from dotenv import load_dotenv
@@ -8,70 +7,25 @@ from datetime import datetime
 
 load_dotenv()
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK")
-TwoTBBlack = "MJWH4LL"
-TwoTBBurgundy = "MJWK4LL"
-TwoTBSilver = "MJWJ4LL"
-zip_code = "19720"
 
-Orange256 = "MJW64LL"
-Silver256 = "MFXG4LL"
-Navy256 = "MFXJ4LL"
+Black256 = "MJW44LL"
+Silver256 = "MJW54LL"
+Burgundy256 = "MJW64LL"
+Glacier256 = "MJW74LL"
+partList = [Black256, Silver256, Burgundy256, Glacier256]
 
-partList = [TwoTBBlack, TwoTBBurgundy, TwoTBSilver]
-# Use either endpoint variant
-#MFXP4LL/A -> 1tb Orange
-#MFXN4LL -> 1tb Silver
-#MFXG4LL -> 256GB Silver
-#MFXR4LL ->2tb Silver
+partLabels = {
+    "MJW44LL": "MJW44LL B-Black",
+    "MJW54LL": "MJW54LL S-Silver",
+    "MJW64LL": "MJW64LL B-Burgundy",
+    "MJW74LL": "MJW74LL G-Glacier",
+}
 
-#christiana store -> R102
-#Reston store -> R271
-#Portland Pioneer Place -> R077
-storeNumber = "R077"
-
-
-def checkSingleStore(partNumber, storeNumber):
-    storeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={partNumber}%2FA&store={storeNumber}"
-    try:
-        response = requests.get(storeUrl, timeout=10)
-        print(response.status_code)
-        if response.status_code == 200:
-            data = response.json()
-            body = data["body"]
-
-            if "stores" in body:
-                specificStore = body["stores"][0]
-                availability = specificStore["partsAvailability"][partNumber + "/A"]["pickupDisplay"]
-                return {
-                    "status": availability,
-                    "name": specificStore["storeName"],
-                    "error": None
-                }
-            else:
-                return {
-                    "status": "error",
-                    "name": None,
-                    "error": "No stores in response"
-                }
-
-        elif response.status_code == 541:
-            return {
-                "status": "error",
-                "name": None,
-                "error": "541 - Rate Limited"
-            }
-        else:
-            return {
-                "status": "error",
-                "name": None,
-                "error": "HTTP " + str(response.status_code)
-            }
-    except Exception as e:
-        return {
-            "status": "error",
-            "name": None,
-            "error": "Exception: " + str(e)
-        }
+storeList = {
+    "R102": "Christiana Mall DE",
+    "R354": "Pheasant Lane Nashua NH",
+    "R027": "Rockingham Park Salem NH",
+}
 
 
 def checkMultipleStores(partList, storeNumber):
@@ -79,7 +33,10 @@ def checkMultipleStores(partList, storeNumber):
         "error": None,
     }
     for partNumber in partList:
-        storeUrl = f"https://www.apple.com/shop/retail/pickup-message?pl=true&parts.0={partNumber}%2FA&store={storeNumber}"
+        storeUrl = (
+            "https://www.apple.com/shop/retail/pickup-message"
+            "?pl=true&parts.0=" + partNumber + "%2FA&store=" + storeNumber
+        )
         try:
             response = requests.get(storeUrl, timeout=10)
             print(response.status_code)
@@ -110,51 +67,62 @@ def checkMultipleStores(partList, storeNumber):
 
 
 def sendDiscordMessage(message):
-    response = requests.post(WEBHOOK_URL, json={"content": message})
+    if not WEBHOOK_URL:
+        print("No webhook, skip Discord:")
+        print(message)
+        return
+    requests.post(WEBHOOK_URL, json={"content": message})
 
 
 def main():
     parts = ", ".join(partList)
-    print("Starting monitor for store " + storeNumber + ", " + parts)
-    sendDiscordMessage("Bot started monitoring " + parts + " at store " + storeNumber)
-    checkCount = 0
+    stores = ", ".join(storeList.keys())
+    print("Starting monitor for stores " + stores + ", " + parts)
+    sendDiscordMessage("Bot started monitoring 256 Pro Max at " + stores)
 
+    checkCount = 0
     while True:
         checkCount += 1
-
         eastern = pytz.timezone("US/Eastern")
         pauseTime = datetime.now(eastern)
         currentTime = datetime.now(eastern).strftime("%I:%M:%S %p")
+
         if pauseTime.hour >= 9 and pauseTime.hour <= 21:
-            result = checkMultipleStores(partList, storeNumber)
-            if result["error"]:
-                errorMessage = result["error"]
-                message = "Check #" + str(checkCount) + " (Error): " + errorMessage
-                sendDiscordMessage(message)
-            else:
-                emojiDict = {}
+            for storeNumber in storeList:
+                result = checkMultipleStores(partList, storeNumber)
+                label = storeList[storeNumber]
+                if result.get("error"):
+                    sendDiscordMessage(
+                        "Check #" + str(checkCount) + " " + label + " error: " + str(result["error"])
+                    )
+                    continue
 
-                for part in result:
-                    if part[0] == "M":
-                        if result[part] == "available":
-                            emojiDict[part] = "GREEN"
-                        else:
-                            emojiDict[part] = "WHITE"
-
-                store_name = result["name"]
-                header = "Check #" + str(checkCount) + "\nTime: " + currentTime + "\n" + store_name
-                message = ""
-
-                for model in emojiDict:
-                    message += emojiDict[model] + " " + model + "\n"
-
-                finalMessage = header + "\n" + message
-                sendDiscordMessage(finalMessage)
-
+                store_name = result.get("name") or label
+                lines = [
+                    "Check #" + str(checkCount),
+                    "Time: " + currentTime,
+                    store_name,
+                ]
+                for part in partList:
+                    status = result.get(part, "missing")
+                    mark = "🟢" if status == "available" else "⚪"
+                    part_label = partLabels.get(part, part)
+                    lines.append(mark + " " + part_label)
+                sendDiscordMessage("\n".join(lines))
             time.sleep(600)
         else:
             time.sleep(3600)
 
+def formatStockMessage(result, header, store_fallback):
+    if result.get("error"):
+        return header + " error: " + str(result["error"])
+    store_name = result.get("name") or store_fallback
+    lines = [header, store_name]
+    for part in partList:
+        status = result.get(part, "missing")
+        mark = "🟢" if status == "available" else "⚪"
+        lines.append(mark + " " + partLabels.get(part, part))
+    return "\n".join(lines)
 
 if __name__ == "__main__":
     main()

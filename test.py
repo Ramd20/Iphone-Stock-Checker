@@ -4,15 +4,18 @@ import time
 
 part_number = "MFXH4LL" #hard coded for now 
 zip_code = "20171"
-TwoTBSilver = "MFXR4LL"
-TwoTBOrange = "MFXT4LL"
-TwoTBNavy = "MFXU4LL"
+# TwoTBSilver = "MFXR4LL"
+# TwoTBOrange = "MFXT4LL"
+# TwoTBNavy = "MFXU4LL"
+TwoTBBlack = "MJWH4LL"
+TwoTBBurgundy = "MJWK4LL"
+TwoTBSilver = "MJWJ4LL"
 zip_code = "19720"
 
-partList = [TwoTBNavy, TwoTBOrange, TwoTBSilver]
+partList = [TwoTBBurgundy, TwoTBBlack, TwoTBSilver]
 # Use either endpoint variant
 
-result = checkMultipleStores(partList, "R102")
+result = checkMultipleStores(partList, "R077")
 
 emojiDict = {
         

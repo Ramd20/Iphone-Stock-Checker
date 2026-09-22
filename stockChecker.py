@@ -25,6 +25,8 @@ storeList = {
     "R102": "Christiana Mall DE",
     "R354": "Pheasant Lane Nashua NH",
     "R027": "Rockingham Park Salem NH",
+    "R631": "Mall of New Hampshire Manchester NH"
+    
 }
 
 

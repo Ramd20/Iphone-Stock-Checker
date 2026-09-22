@@ -12,21 +12,26 @@ Black256 = "MJW44LL"
 Silver256 = "MJW54LL"
 Burgundy256 = "MJW64LL"
 Glacier256 = "MJW74LL"
-partList = [Black256, Silver256, Burgundy256, Glacier256]
+
+Black1TB = "MJWD4LL"
+Silver1TB = "MJWE4LL"
+Burgundy1TB = "MJWF4LL"
+Glacier1TB = "MJWG4LL"
+
+partList = [
+    Black256, Silver256, Burgundy256, Glacier256,
+    Black1TB, Silver1TB, Burgundy1TB, Glacier1TB,
+]
 
 partLabels = {
-    "MJW44LL": "MJW44LL B-Black",
-    "MJW54LL": "MJW54LL S-Silver",
-    "MJW64LL": "MJW64LL B-Burgundy",
-    "MJW74LL": "MJW74LL G-Glacier",
-}
-
-storeList = {
-    "R102": "Christiana Mall DE",
-    "R354": "Pheasant Lane Nashua NH",
-    "R027": "Rockingham Park Salem NH",
-    "R631": "Mall of New Hampshire Manchester NH"
-    
+    "MJW44LL": "MJW44LL B-Black 256",
+    "MJW54LL": "MJW54LL S-Silver 256",
+    "MJW64LL": "MJW64LL B-Burgundy 256",
+    "MJW74LL": "MJW74LL G-Glacier 256",
+    "MJWD4LL": "MJWD4LL B-Black 1TB",
+    "MJWE4LL": "MJWE4LL S-Silver 1TB",
+    "MJWF4LL": "MJWF4LL B-Burgundy 1TB",
+    "MJWG4LL": "MJWG4LL G-Glacier 1TB",
 }
 
 

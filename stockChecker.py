@@ -23,6 +23,13 @@ partList = [
     Black1TB, Silver1TB, Burgundy1TB, Glacier1TB,
 ]
 
+storeList = {
+    "R102": "Christiana Mall DE",
+    "R354": "Pheasant Lane Nashua NH",
+    "R027": "Rockingham Park Salem NH",
+    "R631": "Mall of New Hampshire Manchester NH",
+}
+
 partLabels = {
     "MJW44LL": "MJW44LL B-Black 256",
     "MJW54LL": "MJW54LL S-Silver 256",

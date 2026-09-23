@@ -13,22 +13,36 @@ Silver256 = "MJW54LL"
 Burgundy256 = "MJW64LL"
 Glacier256 = "MJW74LL"
 
+Black512 = "MJW84LL"
+Silver512 = "MJW94LL"
+Burgundy512 = "MJWA4LL"
+Glacier512 = "MJWC4LL"
+
 Black1TB = "MJWD4LL"
 Silver1TB = "MJWE4LL"
 Burgundy1TB = "MJWF4LL"
 Glacier1TB = "MJWG4LL"
 
-Black2TB = "MJWH4LL"
-Silver2TB = "MJWJ4LL"
-Burgundy2TB = "MJWK4LL"
-Glacier2TB = "MJWL4LL"
-
 partList = [
     Black256, Silver256, Burgundy256, Glacier256,
+    Black512, Silver512, Burgundy512, Glacier512,
     Black1TB, Silver1TB, Burgundy1TB, Glacier1TB,
-    Black2TB, Silver2TB, Burgundy2TB, Glacier2TB,
 ]
 
+partLabels = {
+    "MJW44LL": "MJW44LL B-Black 256",
+    "MJW54LL": "MJW54LL S-Silver 256",
+    "MJW64LL": "MJW64LL B-Burgundy 256",
+    "MJW74LL": "MJW74LL G-Glacier 256",
+    "MJW84LL": "MJW84LL B-Black 512",
+    "MJW94LL": "MJW94LL S-Silver 512",
+    "MJWA4LL": "MJWA4LL B-Burgundy 512",
+    "MJWC4LL": "MJWC4LL G-Glacier 512",
+    "MJWD4LL": "MJWD4LL B-Black 1TB",
+    "MJWE4LL": "MJWE4LL S-Silver 1TB",
+    "MJWF4LL": "MJWF4LL B-Burgundy 1TB",
+    "MJWG4LL": "MJWG4LL G-Glacier 1TB",
+}
 storeList = {
     "R102": "Christiana Mall DE",
     "R354": "Pheasant Lane Nashua NH",
@@ -36,20 +50,7 @@ storeList = {
     "R134": "Bridgeport Village Tigard OR",
 }
 
-partLabels = {
-    "MJW44LL": "MJW44LL B-Black 256",
-    "MJW54LL": "MJW54LL S-Silver 256",
-    "MJW64LL": "MJW64LL B-Burgundy 256",
-    "MJW74LL": "MJW74LL G-Glacier 256",
-    "MJWD4LL": "MJWD4LL B-Black 1TB",
-    "MJWE4LL": "MJWE4LL S-Silver 1TB",
-    "MJWF4LL": "MJWF4LL B-Burgundy 1TB",
-    "MJWG4LL": "MJWG4LL G-Glacier 1TB",
-    "MJWH4LL": "MJWH4LL B-Black 2TB",
-    "MJWJ4LL": "MJWJ4LL S-Silver 2TB",
-    "MJWK4LL": "MJWK4LL B-Burgundy 2TB",
-    "MJWL4LL": "MJWL4LL G-Glacier 2TB",
-}
+
 
 
 def checkMultipleStores(partList, storeNumber):

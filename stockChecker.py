@@ -43,11 +43,12 @@ partLabels = {
     "MJWF4LL": "MJWF4LL B-Burgundy 1TB",
     "MJWG4LL": "MJWG4LL G-Glacier 1TB",
 }
+
 storeList = {
     "R102": "Christiana Mall DE",
+    "R027": "Rockingham Park Salem NH",
     "R354": "Pheasant Lane Nashua NH",
-    "R077": "Pioneer Place Portland OR",
-    "R134": "Bridgeport Village Tigard OR",
+    "R631": "Mall of New Hampshire Manchester NH",
 }
 
 

@@ -1,9 +1,10 @@
-import requests
-import time
 import os
-from dotenv import load_dotenv
-import pytz
+import time
 from datetime import datetime
+
+import pytz
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK")
@@ -51,7 +52,7 @@ storeList = {
     "R631": "Mall of New Hampshire Manchester NH",
 }
 
-
+last_green = set()
 
 
 def checkMultipleStores(partList, storeNumber):
@@ -90,12 +91,15 @@ def checkMultipleStores(partList, storeNumber):
         return result
 
 
-def sendDiscordMessage(message):
+def sendDiscordMessage(message, ping_everyone=False):
     if not WEBHOOK_URL:
         print("No webhook, skip Discord:")
         print(message)
         return
-    requests.post(WEBHOOK_URL, json={"content": message})
+    payload = {"content": message}
+    if ping_everyone:
+        payload["allowed_mentions"] = {"parse": ["everyone"]}
+    requests.post(WEBHOOK_URL, json=payload)
 
 
 def formatStockMessage(result, header, store_fallback):
@@ -109,10 +113,28 @@ def formatStockMessage(result, header, store_fallback):
     return "\n".join(lines)
 
 
+def collect_green(storeNumber, result):
+    green = set()
+    if result.get("error"):
+        return green
+    for part in partList:
+        if result.get(part) == "available":
+            green.add((storeNumber, part))
+    return green
+
+
+def ping_new_stock(new_keys):
+    if not new_keys:
+        return
+    sendDiscordMessage("@everyone", ping_everyone=True)
+
+
 def main():
+    global last_green
+
     stores = ", ".join(storeList.keys())
     print("Starting monitor for " + stores)
-    sendDiscordMessage("Bot started monitoring 256/1TB/2TB Pro Max at " + stores)
+    sendDiscordMessage("Bot started monitoring Pro Max at " + stores)
 
     checkCount = 0
     while True:
@@ -122,13 +144,22 @@ def main():
         currentTime = now.strftime("%I:%M:%S %p")
 
         if now.hour >= 9 and now.hour <= 21:
+            now_green = set()
+
             for storeNumber in storeList:
                 result = checkMultipleStores(partList, storeNumber)
+                now_green |= collect_green(storeNumber, result)
+
                 header = "Check #" + str(checkCount) + "\nTime: " + currentTime
                 sendDiscordMessage(
                     formatStockMessage(result, header, storeList[storeNumber])
                 )
                 time.sleep(5)
+
+            new_keys = now_green - last_green
+            ping_new_stock(new_keys)
+            last_green = now_green
+
             time.sleep(600)
         else:
             time.sleep(3600)

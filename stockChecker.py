@@ -9,47 +9,43 @@ from dotenv import load_dotenv
 load_dotenv()
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK")
 
-Black256 = "MJW44LL"
-Silver256 = "MJW54LL"
-Burgundy256 = "MJW64LL"
-Glacier256 = "MJW74LL"
+# iPhone Duo (US / A3447)
+NightSky256 = "MK1F4LL"
+StarWhite256 = "MK1E4LL"
 
-Black512 = "MJW84LL"
-Silver512 = "MJW94LL"
-Burgundy512 = "MJWA4LL"
-Glacier512 = "MJWC4LL"
+NightSky512 = "MK1H4LL"
+StarWhite512 = "MK1G4LL"
 
-Black1TB = "MJWD4LL"
-Silver1TB = "MJWE4LL"
-Burgundy1TB = "MJWF4LL"
-Glacier1TB = "MJWG4LL"
+NightSky1TB = "MK1L4LL"
+StarWhite1TB = "MK1J4LL"
+
+NightSky2TB = "MK1R4LL"
+StarWhite2TB = "MK1Q4LL"
 
 partList = [
-    Black256, Silver256, Burgundy256, Glacier256,
-    Black512, Silver512, Burgundy512, Glacier512,
-    Black1TB, Silver1TB, Burgundy1TB, Glacier1TB,
+    NightSky256, StarWhite256,
+    NightSky512, StarWhite512,
+    NightSky1TB, StarWhite1TB,
+    NightSky2TB, StarWhite2TB,
 ]
 
 partLabels = {
-    "MJW44LL": "MJW44LL B-Black 256",
-    "MJW54LL": "MJW54LL S-Silver 256",
-    "MJW64LL": "MJW64LL B-Burgundy 256",
-    "MJW74LL": "MJW74LL G-Glacier 256",
-    "MJW84LL": "MJW84LL B-Black 512",
-    "MJW94LL": "MJW94LL S-Silver 512",
-    "MJWA4LL": "MJWA4LL B-Burgundy 512",
-    "MJWC4LL": "MJWC4LL G-Glacier 512",
-    "MJWD4LL": "MJWD4LL B-Black 1TB",
-    "MJWE4LL": "MJWE4LL S-Silver 1TB",
-    "MJWF4LL": "MJWF4LL B-Burgundy 1TB",
-    "MJWG4LL": "MJWG4LL G-Glacier 1TB",
+    "MK1F4LL": "MK1F4LL Night Sky 256",
+    "MK1E4LL": "MK1E4LL Star White 256",
+    "MK1H4LL": "MK1H4LL Night Sky 512",
+    "MK1G4LL": "MK1G4LL Star White 512",
+    "MK1L4LL": "MK1L4LL Night Sky 1TB",
+    "MK1J4LL": "MK1J4LL Star White 1TB",
+    "MK1R4LL": "MK1R4LL Night Sky 2TB",
+    "MK1Q4LL": "MK1Q4LL Star White 2TB",
 }
 
 storeList = {
-    "R102": "Christiana Mall DE",
-    "R027": "Rockingham Park Salem NH",
-    "R354": "Pheasant Lane Nashua NH",
-    "R631": "Mall of New Hampshire Manchester NH",
+    "R105": "Oakridge San Jose CA",
+    "R039": "Valley Fair Santa Clara CA",
+    "R824": "Apple Park Visitor Center Cupertino",
+    "R271": "Reston VA",
+    "R010": "Tysons Corner VA",
 }
 
 last_green = set()
@@ -134,7 +130,7 @@ def main():
 
     stores = ", ".join(storeList.keys())
     print("Starting monitor for " + stores)
-    sendDiscordMessage("Bot started monitoring Pro Max at " + stores)
+    sendDiscordMessage("Bot started monitoring iPhone Duo at " + stores)
 
     checkCount = 0
     while True:
